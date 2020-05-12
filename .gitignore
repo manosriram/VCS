@@ -1,5 +1,5 @@
 a.*
 .DS_*
 .vcs
-./AB
-./A
+A
+test.c

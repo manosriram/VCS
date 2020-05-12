@@ -1,5 +1,5 @@
-#ifndef SHA
-#define SHA
+#pragma once
+
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
@@ -124,4 +124,3 @@ int main() {
     for (int t=0;t<5;++t) printf("%x", hg[t]);
 }
 */
-#endif
