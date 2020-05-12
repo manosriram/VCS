@@ -7,6 +7,8 @@ typedef struct Commit {
     char *commit_id;
     char *message, *tree;
     long long int created;
+    FILE *commit_file;
+    unsigned char *buffer;
 } Commit;
 
 long long int current_timestamp() {
@@ -17,13 +19,34 @@ long long int current_timestamp() {
 }
 
 void create_commit(char *tree_hash, char *message) {
-    FILE *temp = fopen("./.vcs/refs/commit", "w");
+    // Write Commit Structure.
+    Commit *commit = (Commit *) malloc(sizeof(Commit));
+    commit->buffer = (unsigned char *) malloc(sizeof(unsigned char) * 16384);
+    commit->created = current_timestamp();
+    commit->message = message;
+    commit->tree = tree_hash;
 
-    unsigned char *cont;
-    long long int now = current_timestamp();
-    sprintf((char *)cont, "%s %lld\n\n%s",  tree_hash, now, message);
+    // Write Commit file path.
+    char *commit_path = (char *)malloc(sizeof(char) * 64);
 
-    uint32_t *hashed_content = SHA1(cont);
+    /* Write Content of Commit. Format is as follows:
+     *
+     *<tree_hash> <created>
+     *
+     *<message>
+     *
+     */
 
+    sprintf((char *)commit->buffer, "%s %lld\n\n%s",  tree_hash, commit->created, commit->message);
+
+    uint32_t *hashed_content = SHA1(commit->buffer);
+    commit->commit_id = combine_hash(hashed_content);
+    sprintf(commit_path, "./.vcs/refs/%s", commit->commit_id);
+    commit->commit_file = fopen(commit_path, "w");
+    fprintf(commit->commit_file, "%s", commit->buffer);
+
+    fclose(commit->commit_file);
+    free(commit->buffer);
+    free(commit);
     return;
 }
