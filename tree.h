@@ -27,19 +27,7 @@ void write_tree_hash(void) {
     tree->buffer = read_file(tree->tree_source);
 
     uint32_t *hashed = hash_file_buffer(tree->buffer);
-    char hash_a[10], hash_b[10], hash_c[10], hash_d[10], hash_e[10];
-
-    sprintf(hash_a, "%x", hashed[0]);
-    sprintf(hash_b, "%x", hashed[1]);
-    sprintf(hash_c, "%x", hashed[2]);
-    sprintf(hash_d, "%x", hashed[3]);
-    sprintf(hash_e, "%x", hashed[4]);
-    
-    strcat(tree->hash, hash_a);
-    strcat(tree->hash, hash_b);
-    strcat(tree->hash, hash_c);
-    strcat(tree->hash, hash_d);
-    strcat(tree->hash, hash_e);
+    tree->hash = combine_hash(hashed);
 
     sprintf(tree->hashed_path, "./.vcs/refs/%s", tree->hash);
     tree->tree_target = fopen(tree->hashed_path, "w");

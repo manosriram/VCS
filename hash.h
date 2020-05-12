@@ -20,6 +20,26 @@ int is_directory(const char *path);
 
 void hash_file_current_dir(char *path, size_t size);
 
+char *combine_hash(uint32_t *hashed) {
+    char hash_a[10], hash_b[10], hash_c[10], hash_d[10], hash_e[10];
+
+    sprintf(hash_a, "%x", hashed[0]);
+    sprintf(hash_b, "%x", hashed[1]);
+    sprintf(hash_c, "%x", hashed[2]);
+    sprintf(hash_d, "%x", hashed[3]);
+    sprintf(hash_e, "%x", hashed[4]);
+
+    char *combined_hash;
+    combined_hash = (char *) malloc(sizeof(char) * 64);
+    strcat(combined_hash, hash_a);
+    strcat(combined_hash, hash_b);
+    strcat(combined_hash, hash_c);
+    strcat(combined_hash, hash_d);
+    strcat(combined_hash, hash_e);
+
+    return combined_hash;
+}
+
 uint32_t *SHA1(const unsigned char * str1) {
     static uint32_t h[5];
     uint32_t a,b,c,d,e,f,k,temp;

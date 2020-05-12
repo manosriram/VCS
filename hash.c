@@ -20,10 +20,8 @@ uint32_t *hash_file_buffer(const unsigned char *file_buffer) {
 
 
 void hash_files_current_dir(char *path, size_t size) {
-    Hash *_hash;
-    File *_file;
-    _hash = (Hash *) malloc(sizeof(Hash));
-    _file = (File *) malloc(sizeof(File));
+    Hash *_hash = (Hash *) malloc(sizeof(Hash));
+    File *_file = (File *) malloc(sizeof(File));
 
     struct dirent *de;
     FILE *file;
@@ -38,7 +36,7 @@ void hash_files_current_dir(char *path, size_t size) {
         char *name = entry->d_name;
         if (file_ignored(name)) continue;
         if (entry->d_type == DT_DIR) {
-            if (len + strlen(name) + 2 > size) {
+            if (len + strlen(entry->d_name) + 2 > size) {
                 fprintf(stderr, "path too long: %s/%s\n", path, name);
             } else {
                 path[len] = '/';
@@ -50,29 +48,15 @@ void hash_files_current_dir(char *path, size_t size) {
             sprintf(_hash->combined, "%s/%s", path, name);
 
             file = fopen(_hash->combined, "r");
-            // printf("%s\n", combined);
+            // printf("%s\n", _hash->combined);
 
             _file->file_buffer = read_file(file);
             uint32_t *hashed = hash_file_buffer(_file->file_buffer);
 
-            char hash_a[10], hash_b[10], hash_c[10], hash_d[10], hash_e[10];
-
-            sprintf(hash_a, "%x", hashed[0]);
-            sprintf(hash_b, "%x", hashed[1]);
-            sprintf(hash_c, "%x", hashed[2]);
-            sprintf(hash_d, "%x", hashed[3]);
-            sprintf(hash_e, "%x", hashed[4]);
-
-            _hash->hash_result = calloc(40, sizeof(char));
-
-            strcat(_hash->hash_result, hash_a);
-            strcat(_hash->hash_result, hash_b);
-            strcat(_hash->hash_result, hash_c);
-            strcat(_hash->hash_result, hash_d);
-            strcat(_hash->hash_result, hash_e);
-
+            _hash->hash_result = combine_hash(hashed);
             snprintf(_hash->hashed_file_path, sizeof(_hash->hashed_file_path), "./.vcs/objects/%s", _hash->hash_result);
 
+            printf("%s\n", _hash->hashed_file_path);
             remove(_hash->hashed_file_path);
             _file->new_file_creator = fopen(_hash->hashed_file_path, "w");
             fprintf(_file->new_file_creator, "%s", _file->file_buffer);
@@ -82,8 +66,6 @@ void hash_files_current_dir(char *path, size_t size) {
                 mkdir("./.vcs/refs", 0777);
 
             write_to_tree(_hash, name);
-
-            free(_hash->hash_result);
         }
     }
     closedir(dir);
@@ -92,7 +74,7 @@ void hash_files_current_dir(char *path, size_t size) {
 }
 
 int main() {
-    char path[1024] = ".";
+    char path[526] = ".";
     hash_files_current_dir(path, sizeof path);
 
     write_tree_hash();
