@@ -6,6 +6,14 @@
 #include<stdlib.h>
 #define rotateleft(x,n) ((x<<n) | (x>>(32-n)))
 
+unsigned char *read_file(FILE *file_pointer);
+
+uint32_t *hash_file_buffer(unsigned char *file_buffer);
+
+int is_directory(const char *path);
+
+void hash_file_current_dir(char *path, size_t size);
+
 uint32_t *SHA1(unsigned char * str1) {
     static uint32_t h[5];
     uint32_t a,b,c,d,e,f,k,temp;
