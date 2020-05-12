@@ -6,15 +6,21 @@
 #include<stdlib.h>
 #define rotateleft(x,n) ((x<<n) | (x>>(32-n)))
 
+typedef struct Hash {
+    uint32_t *hashed_buffer;
+    char hashed_file_path[255], combined[64];
+    char *hash_result;
+} Hash;
+
 unsigned char *read_file(FILE *file_pointer);
 
-uint32_t *hash_file_buffer(unsigned char *file_buffer);
+uint32_t *hash_file_buffer(const unsigned char *file_buffer);
 
 int is_directory(const char *path);
 
 void hash_file_current_dir(char *path, size_t size);
 
-uint32_t *SHA1(unsigned char * str1) {
+uint32_t *SHA1(const unsigned char * str1) {
     static uint32_t h[5];
     uint32_t a,b,c,d,e,f,k,temp;
 
@@ -25,7 +31,6 @@ uint32_t *SHA1(unsigned char * str1) {
     h[4] = 0xC3D2E1F0;
 
     unsigned char * str;
-
     str = (unsigned char *)malloc(strlen((const char *)str1)+100);
     strcpy((char *)str,(const char *)str1);
 
@@ -70,8 +75,8 @@ uint32_t *SHA1(unsigned char * str1) {
 
     for(i=0;i<number_of_chunks;i++) {
         for(j=0;j<16;j++) {
-            word[j] = 
-                str[i*64 + j*4 + 0] * 0x1000000 + str[i*64 + j*4 + 1] * 0x10000 + 
+            word[j] =
+                str[i*64 + j*4 + 0] * 0x1000000 + str[i*64 + j*4 + 1] * 0x10000 +
                 str[i*64 + j*4 + 2] * 0x100 + str[i*64 + j*4 + 3];
         }
         for(j=16;j<80;j++) {
@@ -119,8 +124,8 @@ uint32_t *SHA1(unsigned char * str1) {
 }
 
 /*
-int main() {
-    uint32_t *hg = SHA1((unsigned char *)buffer);
-    for (int t=0;t<5;++t) printf("%x", hg[t]);
-}
-*/
+   int main() {
+   uint32_t *hg = SHA1((unsigned char *)buffer);
+   for (int t=0;t<5;++t) printf("%x", hg[t]);
+   }
+   */

@@ -4,6 +4,12 @@
 #include <sys/stat.h>
 #include <stdbool.h>
 
+typedef struct File {
+    unsigned char *file_buffer;
+    char *file_path;
+    FILE *new_file_creator;
+} File;
+
 /*
  * To be called like this: file_exists(filename); (filename is of (char *) type)
  */
@@ -21,7 +27,7 @@ unsigned int file_ignored(char *filename) {
     ignored = fopen(".vcsignore", "r");
     const size_t line_size = 256;
 
-    char* line = (char *)malloc(line_size);
+    char* line = (char *) malloc(line_size);
     while (fgets(line, line_size, ignored) != NULL)  {
         if (strcmp(line, filename) == 10) return 1;
     }

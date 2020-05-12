@@ -9,15 +9,24 @@
 #include <dirent.h>
 #include "hash.h"
 
-void write_tree_hash() {
-    const char *tree_path = "./.vcs/refs/tree";
-    FILE *tree_source, *tree_target;
-    tree_source = fopen(tree_path, "r");
+ typedef struct Tree {
+    const char *path;
+    const unsigned char *buffer;
+    char *hash, *hashed_path;
 
-    unsigned char *tree_cont = read_file(tree_source);
-    uint32_t *hashed = hash_file_buffer(tree_cont);
-    char *hashed_tree = (char *) calloc(50, sizeof(char));
-    char *tree_hashed = (char *) calloc(264, sizeof(char));
+    FILE *tree_source, *tree_target;
+} Tree;
+
+void write_tree_hash(void) {
+    Tree *tree = (Tree *) malloc(sizeof(Tree));
+
+    tree->hash = (char *) calloc(100, sizeof(char));
+    tree->hashed_path = (char *) calloc(264, sizeof(char));
+    tree->path = "./.vcs/refs/tree";
+    tree->tree_source = fopen(tree->path, "r");
+    tree->buffer = read_file(tree->tree_source);
+
+    uint32_t *hashed = hash_file_buffer(tree->buffer);
     char hash_a[10], hash_b[10], hash_c[10], hash_d[10], hash_e[10];
 
     sprintf(hash_a, "%x", hashed[0]);
@@ -26,29 +35,31 @@ void write_tree_hash() {
     sprintf(hash_d, "%x", hashed[3]);
     sprintf(hash_e, "%x", hashed[4]);
     
-    strcat(hashed_tree, hash_a);
-    strcat(hashed_tree, hash_b);
-    strcat(hashed_tree, hash_c);
-    strcat(hashed_tree, hash_d);
-    strcat(hashed_tree, hash_e);
+    strcat(tree->hash, hash_a);
+    strcat(tree->hash, hash_b);
+    strcat(tree->hash, hash_c);
+    strcat(tree->hash, hash_d);
+    strcat(tree->hash, hash_e);
 
-    sprintf(tree_hashed, "./.vcs/refs/%s", hashed_tree);
-    tree_target = fopen(tree_hashed, "w");
+    sprintf(tree->hashed_path, "./.vcs/refs/%s", tree->hash);
+    tree->tree_target = fopen(tree->hashed_path, "w");
 
-    fprintf(tree_target, "%s", tree_cont);
+    fprintf(tree->tree_target, "%s", tree->buffer);
 
-    fclose(tree_target);
-    fclose(tree_source);
-    remove(tree_path);
+    fclose(tree->tree_target);
+    fclose(tree->tree_source);
+    free(tree);
+    remove(tree->path);
     return;
 }
 
-void write_to_tree(const char *hash, const char *path, const char *filename) {
+void write_to_tree(Hash *_hash, const char *filename) {
     // path/filename -> location of original file-object
+   
     const char *tree_path = "./.vcs/refs/tree";
     FILE *tree_file = fopen(tree_path, "a");
     
-    fprintf(tree_file, "%s %s\n", hash, path);
+    fprintf(tree_file, "%s %s\n", _hash->hash_result, _hash->combined);
     fclose(tree_file);
     return;
 }
