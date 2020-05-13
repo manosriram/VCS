@@ -1,5 +1,6 @@
 #pragma once
-
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <stdbool.h>
@@ -22,7 +23,7 @@ unsigned int file_exists(char *filename) {
  * Checks if the file is ignored or not.
  * Return an unsigned int, 1 if ignored, 0 if not.
  */
-unsigned int file_ignored(char *filename) {
+unsigned int file_ignored(const char *filename) {
     FILE* ignored;
     ignored = fopen(".vcsignore", "r");
     const size_t line_size = 256;
