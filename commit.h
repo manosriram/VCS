@@ -60,12 +60,18 @@ void display_all_commits() {
     FILE *file = fopen("./.vcs/refs/commit_hist", "r");
 
     char line[3424];
-    while (fgets(line, sizeof(line), file)) {
-        printf("%s", line);
-    }
+    while (fgets(line, sizeof(line), file)) printf("%s", line);
     return;
 }
 
-char *get_commit_by_id(char *commit_id) {
+void get_commit_by_id(char *commit_id) {
+    char path[3424];
+    sprintf(path, "./.vcs/refs/%s", commit_id);
+    FILE *file = fopen(path, "r");
+
+    char line[3424];
+    while (fgets(line, sizeof(line), file)) printf("%s", line);
+
+    return;
 }
 
