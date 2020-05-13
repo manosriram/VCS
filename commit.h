@@ -47,9 +47,25 @@ void create_commit(char *name, char *tree_hash, char *message) {
     sprintf(commit_path, "./.vcs/refs/%s", commit->commit_id);
     commit->commit_file = fopen(commit_path, "w");
     fprintf(commit->commit_file, "%s", commit->buffer);
+    FILE *hash_file = fopen("./.vcs/refs/commit_hist", "a");
+    fprintf(hash_file, "%s\n---------------------------------------------------------------------------\n", commit->buffer);
 
     fclose(commit->commit_file);
     free(commit->buffer);
     free(commit);
     return;
 }
+
+void display_all_commits() {
+    FILE *file = fopen("./.vcs/refs/commit_hist", "r");
+
+    char line[3424];
+    while (fgets(line, sizeof(line), file)) {
+        printf("%s", line);
+    }
+    return;
+}
+
+char *get_commit_by_id(char *commit_id) {
+}
+

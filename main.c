@@ -11,11 +11,14 @@
 #include "hash.h"
 #include "commit.h"
 
-int main() {
-    char path[526] = ".";
-    hash_files_current_dir(path, sizeof path);
+int main(int argc, char **argv) {
+    if (!strcmp(argv[1], "commit")) {
+        char path[526] = ".";
+        hash_files_current_dir(path, sizeof path);
 
-    char *tree_hash = write_tree_hash();
-    create_commit("unique name", tree_hash, "Initial Commit");
+        char *tree_hash = write_tree_hash();
+        create_commit(argv[2], tree_hash, argv[3]);
+    } else if (!strcmp(argv[1], "log")) {
+        display_all_commits();
+    }
 }
-
