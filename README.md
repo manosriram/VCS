@@ -1,6 +1,30 @@
 #### Control-System which helps file tracking and storing different versions of files.
 
 ```
+Useful Way to deal with files.
+
+View previous versions by -log command. (./vcs -log)
+Copy the version's commit_id you need.
+View the tree of that commit using -tree command. (./vcs -tree <commit_id>)
+It shows all the files of that version.
+Copy any file's hash and view content by -file command. (./vcs -file <file_hash>)
+```
+
+```
+Commit Structure:
+<tree_hash_of_commit> <commit_created_on>
+
+<commit_message>
+Commit <commit_id>
+```
+
+```
+Tree Structure:
+<file_hash> <path_to_file>
+```
+
+
+```
 Usage: 
 ./vcs <options>
   
