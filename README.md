@@ -4,11 +4,11 @@
 Usage: 
 ./vcs <options>
   
--log [Commit logs] <br />
--view <commit_id> or <tree_id> [View Commit or Tree]<br />
--commit <commit_message> [Take a snapshot of current repository status]<br />
--tree <commit_id> [Shows the tree of that commit] <br />
--file <file_hash> [View contents of file]<br />
+-log [Commit logs]
+-view <commit_id> or <tree_id> [View Commit or Tree]
+-commit <commit_message> [Take a snapshot of current repository status]
+-tree <commit_id> [Shows the tree of that commit]
+-file <file_hash> [View contents of file]
 ```
 
 **Flow**
