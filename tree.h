@@ -56,6 +56,10 @@ void view_tree(char *tree_hash) {
     char *path = (char *) malloc(sizeof(char) * 264);
     sprintf(path, "./.vcs/refs/%s", tree_hash);
     FILE *tree_file = fopen(path, "r");
+    if (!tree_file) {
+        printf("Invalid commit_hash\n");
+        return;
+    }
     char cc;
 
     while (1) {

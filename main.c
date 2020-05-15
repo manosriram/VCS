@@ -16,6 +16,12 @@ void die(char* message){
 }
 
 int main(int argc, char **argv) {
+    if (!is_directory("./.vcs/refs"))
+        mkdir("./.vcs/refs", 0777);
+
+    if (!is_directory("./.vcs/objects"))
+        mkdir("./.vcs/objects", 0777);
+
     if (!argv[1]) die("Usage: \n./vcs <options>\n\n<options>: \n-log [Commit logs]\n-view <commit_id> or <tree_id> [View Commit or Tree]\n-commit <commit_message> [Take a snapshot of current repository status]\n-tree <commit_id> [Shows the tree of that commit]\n-file <file_hash> [View contents of file]");
     if (!strcmp(argv[1], "-commit")) {
         char path[526] = ".";

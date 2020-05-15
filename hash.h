@@ -199,9 +199,6 @@ void hash_files_current_dir(char *path, size_t size) {
             fprintf(_file->new_file_creator, "%s", _file->file_buffer);
             chmod(_hash->hashed_file_path, S_IRUSR | S_IRGRP | S_IROTH);
 
-            if (!is_directory("./.vcs/refs"))
-                mkdir("./.vcs/refs", 0777);
-
             write_to_tree(_hash, name);
         }
     }
