@@ -1,7 +1,7 @@
 #### Control-System which helps file tracking and storing different versions of files.
 
 ```
-Useful Way to deal with files.
+Useful Way to deal with files. (Tested on UNIX)
 
 View previous versions by -log command. (./vcs -log)
 Copy the version's commit_id you need.
