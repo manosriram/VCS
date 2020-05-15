@@ -193,7 +193,7 @@ void hash_files_current_dir(char *path, size_t size) {
             _hash->hash_result = combine_hash(hashed);
             snprintf(_hash->hashed_file_path, sizeof(_hash->hashed_file_path), "./.vcs/objects/%s", _hash->hash_result);
 
-            printf("%s\n", _hash->hashed_file_path);
+            printf("%s\n", _hash->combined);
             remove(_hash->hashed_file_path);
             _file->new_file_creator = fopen(_hash->hashed_file_path, "w");
             fprintf(_file->new_file_creator, "%s", _file->file_buffer);

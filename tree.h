@@ -33,7 +33,7 @@ char *write_tree_hash(void) {
     sprintf(tree->hashed_path, "./.vcs/refs/%s", tree->hash);
     tree->tree_target = fopen(tree->hashed_path, "w");
 
-    fprintf(tree->tree_target, "%s", tree->buffer);
+    fprintf(tree->tree_target, "%s\n", tree->buffer);
 
     fclose(tree->tree_target);
     fclose(tree->tree_source);
@@ -51,3 +51,18 @@ void write_to_tree(Hash *_hash, const char *filename) {
     fclose(tree_file);
     return;
 }
+
+void view_tree(char *tree_hash) {
+    char *path = (char *) malloc(sizeof(char) * 264);
+    sprintf(path, "./.vcs/refs/%s", tree_hash);
+    FILE *tree_file = fopen(path, "r");
+    char cc;
+
+    while (1) {
+       cc = fgetc(tree_file);
+       if (cc == EOF) return;
+       printf("%c", cc);
+    }
+    return;
+}
+
